@@ -82,6 +82,7 @@ class E2E(object):
             Returns:
                 obj:OCTVolumeWithMetaData
         """
+        images = []
         with open(self.filepath, 'rb') as f:
             raw = f.read(36)
             header = self.header_structure.parse(raw)
@@ -142,10 +143,11 @@ class E2E(object):
                         raw_volume = list(map(float, all_bits))
                         #image = np.array(raw_volume).reshape(image_data.width, image_data.height)
                         image = np.array(raw_volume).reshape(image_data.width, image_data.height).astype('uint8')
+                        images.append(image)
                         # plt.imshow(image)
 
 
-        return image
+        return images
 
     def read_oct_volume(self):
         """ Reads OCT data.
