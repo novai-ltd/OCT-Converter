@@ -76,6 +76,77 @@ class E2E(object):
             'height' / Int32un,
         )
 
+    def read_clso_image(self):
+        """ Reads OCT data.
+
+            Returns:
+                obj:OCTVolumeWithMetaData
+        """
+        with open(self.filepath, 'rb') as f:
+            raw = f.read(36)
+            header = self.header_structure.parse(raw)
+
+            raw = f.read(52)
+            main_directory = self.main_directory_structure.parse(raw)
+
+            # traverse list of main directories in first pass
+            directory_stack = []
+
+            current = main_directory.current
+            while current != 0:
+                directory_stack.append(current)
+                f.seek(current)
+                raw = f.read(52)
+                directory_chunk = self.main_directory_structure.parse(raw)
+                current = directory_chunk.prev
+
+            # traverse in second pass and  get all subdirectories
+            chunk_stack = []
+            volume_dict = {}
+            for position in directory_stack:
+                f.seek(position)
+                raw = f.read(52)
+                directory_chunk = self.main_directory_structure.parse(raw)
+
+                for ii in range(directory_chunk.num_entries):
+                    raw = f.read(44)
+                    chunk = self.sub_directory_structure.parse(raw)
+                    volume_string = '{}_{}_{}'.format(chunk.patient_id, chunk.study_id, chunk.series_id)
+                    if volume_string not in volume_dict.keys():
+                        volume_dict[volume_string] = chunk.slice_id / 2
+                    elif chunk.slice_id / 2 > volume_dict[volume_string]:
+                        volume_dict[volume_string] = chunk.slice_id / 2
+
+                    if chunk.start > chunk.pos:
+                        chunk_stack.append([chunk.start, chunk.size])
+
+            # initalise dict to hold all the image volumes
+            volume_array_dict = {}
+            for volume, num_slices in volume_dict.items():
+                if num_slices > 0:
+                    volume_array_dict[volume] = [0] * int(num_slices)
+
+            # traverse all chunks and extract slices
+            for start, pos in chunk_stack:
+                f.seek(start)
+                raw = f.read(60)
+                chunk = self.chunk_structure.parse(raw)
+
+                if chunk.type == 1073741824:  # image data
+                    raw = f.read(20)
+                    image_data = self.image_structure.parse(raw)
+
+                    if chunk.ind == 0:  # fundus data
+                        all_bits = f.read(image_data.height * image_data.width)
+                        #[f.read(1) for i in range(image_data.height * image_data.width)]
+                        raw_volume = list(map(float, all_bits))
+                        #image = np.array(raw_volume).reshape(image_data.width, image_data.height)
+                        image = np.array(raw_volume).reshape(image_data.width, image_data.height).astype('uint8')
+                        # plt.imshow(image)
+
+
+        return image
+
     def read_oct_volume(self):
         """ Reads OCT data.
 
