@@ -197,7 +197,9 @@ class E2E(object):
             volume_array_dict = {}
             for volume, num_slices in volume_dict.items():
                 if num_slices > 0:
+                    num_slices = num_slices+1
                     volume_array_dict[volume] = [0] * int(num_slices)
+
 
             # traverse all chunks and extract slices
             for start, pos in chunk_stack:
@@ -210,6 +212,7 @@ class E2E(object):
                     image_data = self.image_structure.parse(raw)
 
                     if chunk.ind == 0:  # fundus data
+                        print('fundus tag')
                         pass
                         # raw_volume = [struct.unpack('H', f.read(2))[0] for pixel in range(height*width)]
                         # image = np.array(raw_volume).reshape(height,width)
@@ -224,6 +227,12 @@ class E2E(object):
                             volume_array_dict[volume_string][int(chunk.slice_id / 2) - 1] = image
                         else:
                             print('Failed to save image data for volume {}'.format(volume_string))
+                    else :
+                        print('Chunk ind:{0}'.format(chunk.ind))
+                else:
+                    raw = f.read(20)
+                    image_data = self.image_structure.parse(raw)
+                    print('Chunk type:{0}, wid:{1}, hei:{2}'.format(chunk.type, image_data.width, image_data.height))
 
             oct_volumes = []
             for key, volume in volume_array_dict.items():
