@@ -224,15 +224,17 @@ class E2E(object):
                         image = 256 * pow(image, 1.0 / 2.4)
                         volume_string = '{}_{}_{}'.format(chunk.patient_id, chunk.study_id, chunk.series_id)
                         if volume_string in volume_array_dict.keys():
-                            volume_array_dict[volume_string][int(chunk.slice_id / 2) - 1] = image
+                            volume_array_dict[volume_string][int(chunk.slice_id / 2)] = image
+                            #print(chunk.slice_id)
+                            #volume_array_dict[volume_string][chunk.slice_id-2] = image
                         else:
                             print('Failed to save image data for volume {}'.format(volume_string))
-                    else :
-                        print('Chunk ind:{0}'.format(chunk.ind))
-                else:
-                    raw = f.read(20)
-                    image_data = self.image_structure.parse(raw)
-                    print('Chunk type:{0}, wid:{1}, hei:{2}'.format(chunk.type, image_data.width, image_data.height))
+               #     else :
+               #         print('Chunk ind:{0}'.format(chunk.ind))
+                # else:
+                #     raw = f.read(20)
+                #     image_data = self.image_structure.parse(raw)
+                #     print('Chunk type:{0}, wid:{1}, hei:{2}'.format(chunk.type, image_data.width, image_data.height))
 
             oct_volumes = []
             for key, volume in volume_array_dict.items():

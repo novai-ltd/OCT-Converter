@@ -5,7 +5,7 @@ import os
 
 indir = r'D:\data\AMD\OCTSetGA\case26_extra'
 #filepath = os.path.join(indir,'OCT exsample 1.E2E')
-filenames = ['026_F026.E2E']#, '026_F016.E2E', '02601C.E2E']
+filenames = ['026_F026.E2E', '026_F016.E2E', '02601C.E2E']
 for filename in filenames:
     filepath = os.path.join(indir,filename)
     #
