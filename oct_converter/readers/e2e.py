@@ -212,7 +212,7 @@ class E2E(object):
                     image_data = self.image_structure.parse(raw)
 
                     if chunk.ind == 0:  # fundus data
-                        print('fundus tag')
+                       # print('fundus tag')
                         pass
                         # raw_volume = [struct.unpack('H', f.read(2))[0] for pixel in range(height*width)]
                         # image = np.array(raw_volume).reshape(height,width)
