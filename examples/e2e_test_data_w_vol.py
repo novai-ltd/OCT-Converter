@@ -3,7 +3,7 @@ import cv2
 import os
 
 
-indir = r'Y:\Backup\data\data\Phase2_E2E\E2E darc2 imaging\Glaucuma_single\All'
+indir = r'Z:\data\e2e\09_02_2021\wetransfer-067bf9'
 #filepath = os.path.join(indir,'OCT exsample 1.E2E')
 #filenames = ['OCT exsample 1.E2E','OCT exsample 2.E2E','OCT exsample.E2E','PATIE013.E2E','Unknow Patient OCT Data.E2E']#,SBL5004A '026_F016.E2E', '02601C.E2E']
 filenames = os.listdir(indir)#,'OCT exsample 2.E2E','OCT exsample.E2E','PATIE013.E2E','Unknow Patient OCT Data.E2E']#,SBL5004A '026_F016.E2E', '02601C.E2E']
@@ -17,15 +17,15 @@ for filename in filenames:
     # cv2.imshow('img1',cslo_imgs[0])
     # cv2.imshow('img2',cslo_imgs[1])
     # cv2.waitKey()
-    # oct_volumes = file.read_oct_volume()  # returns an OCT volume with additional metadata if available
-    # #
-    # for vi in range(len(oct_volumes) ):
-    #     volume = oct_volumes[vi]
-    #     os.makedirs(os.path.join(indir, 'out', filename, 'oct', str(vi)), exist_ok=True)
-    #     #volume.peek()  # plots a montage of the volume
-    #
-    #     for i in range(volume.num_slices):
-    #         cv2.imwrite(os.path.join(indir, 'out', filename, 'oct', str(vi), '{0}.png'.format(i)), volume.volume[i])
+    oct_volumes = file.read_oct_volume()  # returns an OCT volume with additional metadata if available
+
+    for vi in range(len(oct_volumes) ):
+        volume = oct_volumes[vi]
+        os.makedirs(os.path.join(indir, 'out', filename, 'vol', str(vi)), exist_ok=True)
+        #volume.peek()  # plots a montage of the volume
+
+        for i in range(volume.num_slices):
+            cv2.imwrite(os.path.join(indir, 'out', filename, 'vol', str(vi), '{0}.png'.format(i)), volume.volume[i])
 
             #volume.save(os.path.join(indir,'out',filename,'oct','{}.avi'.format(volume.patient_id)))
 
