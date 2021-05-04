@@ -94,12 +94,12 @@ for folder in folders:
                 fout.write(s)
                 for visit in visitNums:
                     #DARCII_AAA_XX_YYYYY_ZZ_00000000_RE/LE_1.x_1
-                    patientID5 = '{0:03}'.format(int(caseID))
+                    patientID3 = '{0:03}'.format(int(caseID))
                     visitID2 = visit
                     imageSeq  = 1
-                    outFName = 'DARC_{0}_{1}_{2}_{3}_{4}_{5}_{6}_{7}_O.E2E'.format(CountryID,SiteID,patientID5,visitID2,DateID,eyeSide, timeID, imageSeq)
+                    outFName = 'DARC_{0}_{1}_{2}_{3}_{4}_{5}_{6}_{7}_O.E2E'.format(CountryID,SiteID,patientID3,eyeSide,visitID2,DateID,timeID, imageSeq)
 
-                    foldersuffix = os.path.join(CountryID, SiteID, patientID5,visitID2)
+                    foldersuffix = os.path.join(CountryID, SiteID, patientID3,visitID2)
 
                     if (mindiff > 100000):
                         OutD = os.path.join(E2EOUTPoor)
