@@ -5,7 +5,7 @@ from glob import glob
 import numpy as np
 from shutil import copy2
 
-TIFFIN = r'Z:\data\Phase2\p2_eye_gl_no_border_no_lowres\NovaiTestSite'
+TIFFIN = r'z:\data\Phase2\p2_eye_no_border_no_lowres_w_country_gl\GBR\01'
 E2EIN = r'Z:\data\Phase2\E2E darc2 imaging\Glaucuma_single\All'
 E2EOUTBASE = r'Z:\data\Phase2\E2E darc2 imaging\Glaucuma_single_correctS_new_fname_18_05_21'
 E2EOUT = os.path.join(E2EOUTBASE,'Filtered')
@@ -19,26 +19,26 @@ CountryID='GBR'
 SiteID ='01'
 DateID = '04052021'
 visitNums = ['v1']#,'02','03','04','05','06']
-sideLUT ={'LE':'OS','RE':'OD'}
+sideLUT ={'OS':'OS','OD':'OD'}
 
 #the
 folders = os.listdir(TIFFIN)#,'OCT exsample 2.E2E','OCT exsample.E2E','PATIE013.E2E','Unknow Patient OCT Data.E2E']#,SBL5004A '026_F016.E2E', '02601C.E2E']
 for folder in folders:
-    filenames = os.listdir(os.path.join(TIFFIN, folder,'01'))
+    filenames = os.listdir(os.path.join(TIFFIN, folder,'v1'))
     for filename in filenames:
         if filename.endswith('.tiff'):
-            filepathTIFF = os.path.join(TIFFIN,folder,'01',filename)
+            filepathTIFF = os.path.join(TIFFIN,folder,'v1',filename)
             imgTiffRGB = cv2.imread(filepathTIFF)
             imgTiffB, imgTiffG,imgTiffR = cv2.split(imgTiffRGB)
             imgTiff = imgTiffG
 
             filenameSplit = os.path.splitext(filename)[0].split('_')
             DARC = filenameSplit[0]
-            caseID = filenameSplit[1]
-            shortDate = filenameSplit[2]
+            caseID = filenameSplit[3]
+            shortDate = filenameSplit[6]
             eyeSide = sideLUT[filenameSplit[4]]
-            timeID=filenameSplit[5]
-            imageSeq = filenameSplit[6]
+            timeID=filenameSplit[7]
+            imageSeq = filenameSplit[5]
             # filenameE2E = '{0}_{1}_{2}_*_{3}_{4}_*.E2E'.format(
             # DARC,
             # caseID,
